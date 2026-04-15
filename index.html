@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Stress Level Predictor</title>
+
+    <style>
+        body {
+            font-family: 'Segoe UI';
+            background: linear-gradient(135deg, #1e3c72, #2a5298);
+            color: white;
+            text-align: center;
+        }
+
+        .container {
+            margin: 50px auto;
+            width: 420px;
+            padding: 30px;
+            border-radius: 15px;
+            background: rgba(255,255,255,0.1);
+        }
+
+        input {
+            width: 90%;
+            padding: 12px;
+            margin: 10px;
+            border-radius: 8px;
+            border: none;
+        }
+
+        button {
+            padding: 12px 20px;
+            margin: 10px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .predict-btn {
+            background: #00c9a7;
+            color: white;
+        }
+
+        .reset-btn {
+            background: #ff4d4d;
+            color: white;
+        }
+
+        #result {
+            margin-top: 20px;
+            font-size: 22px;
+        }
+
+        img {
+            margin-top: 15px;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<h1>🧠 Stress Level Prediction</h1>
+
+<div class="container">
+
+<form action="/predict" method="post" id="form">
+
+<input name="study" type="number" placeholder="Study Hours 📚" value="{{ study or '' }}" required>
+
+<input name="sleep" type="number" placeholder="Sleep Hours 😴" value="{{ sleep or '' }}" required>
+
+<input name="social" type="number" placeholder="Social Hours 🎉" value="{{ social or '' }}" required>
+
+<button type="submit" class="predict-btn">Predict</button>
+<button type="button" class="reset-btn" onclick="resetForm()">Reset</button>
+
+</form>
+
+{% if result is not none %}
+
+<div id="result">
+    {% if result == 'high' %}
+        🔴 High Stress 😰
+    {% elif result == 'moderate' %}
+        🟡 Moderate Stress 😐
+    {% else %}
+        🟢 Low Stress 😊
+    {% endif %}
+</div>
+
+<div>Confidence: {{ confidence }}%</div>
+<div>{{ suggestion }}</div>
+
+<h3>📊 Predicted Stress Graph</h3>
+<img src="{{ url_for('static', filename='graph.png') }}" width="300">
+
+<h3>📈 Feature Importance</h3>
+<img src="{{ url_for('static', filename='feature.png') }}" width="300">
+
+<h3>📊 Metrics</h3>
+<img src="{{ url_for('static', filename='metrics.png') }}" width="300">
+
+{% endif %}
+
+</div>
+
+<script>
+function resetForm() {
+    window.location.href = "/";
+}
+</script>
+
+</body>
+</html>
